@@ -247,4 +247,12 @@ export const pt = {
   },
 } as const;
 
-export type Translations = typeof pt;
+type DeepWriteable<T> = T extends readonly (infer U)[]
+  ? DeepWriteable<U>[]
+  : T extends object
+  ? { [K in keyof T]: DeepWriteable<T[K]> }
+  : T extends string
+  ? string
+  : T;
+
+export type Translations = DeepWriteable<typeof pt>;
