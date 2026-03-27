@@ -48,15 +48,13 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ─── Light mode (default) ─── */
 :root {
-  --bg:        #05080f;
-  --surface:   #0d1117;
-  --card-bg:   #111827;
-  --border:    #1e293b;
-  --text:      #f1f5f9;
-  --muted:     #64748b;
-  --accent:    #22c55e;
-  --accent2:   #3b82f6;
+  --bg:           #f8fafc;
+  --surface:      #ffffff;
+  --card-bg:      #f1f5f9;
+  --border-custom:#e2e8f0;
+  --text:         #0f172a;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -92,7 +90,14 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ─── Dark mode ─── */
 .dark {
+  --bg:           #05080f;
+  --surface:      #0d1117;
+  --card-bg:      #111827;
+  --border-custom:#1e293b;
+  --text:         #f1f5f9;
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -132,22 +137,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: #05080f;
-  color: #f1f5f9;
-  -webkit-font-smoothing: antialiased;
-}
-
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #05080f; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-custom); border-radius: 2px; }
