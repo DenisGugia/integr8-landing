@@ -3,8 +3,8 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
+import { useTranslation } from "@/lib/i18n/context";
 
-const WA = "https://wa.me/12269617351?text=Quero+entender+o+protocolo";
 const IMG_PADDING = 12;
 
 interface ParallaxBlock {
@@ -14,52 +14,49 @@ interface ParallaxBlock {
   body: string;
 }
 
-const blocks: ParallaxBlock[] = [
-  {
-    imgUrl: "/placeholders/hero-1.jpg",
-    subheading: "Para quem cuida de tudo. Menos de si.",
-    heading: "Por que programas falham com quem mais se esforça.",
-    body: "Todo programa que você já tentou foi construído para uma rotina que não é a sua. Um cliente ideal com 3 a 5 dias livres, 8 horas de sono, sem reunião às 18h. Esse cliente existe — mas é a exceção.",
-  },
-  {
-    imgUrl: "/placeholders/hero-2.jpg",
-    subheading: "O ponto de virada",
-    heading: "O que muda quando o protocolo começa por você.",
-    body: "Não é falta de disciplina. É incompatibilidade. A mesma vontade que trouxe para cada tentativa é a que vai funcionar quando o protocolo for feito para você — não para um perfil genérico.",
-  },
-  {
-    imgUrl: "/placeholders/hero-3.jpg",
-    subheading: "Construído para a semana real",
-    heading: "Como o C.O.R.E. 8 absorve a semana que desanda.",
-    body: "Imprevistos não são exceção — são a regra. O protocolo foi construído para eles. Quando a semana complica, você remeja. O coach analisa. O protocolo continua.",
-  },
+const internalBlocks = [
+  { imgUrl: "/placeholders/hero-1.jpg" },
+  { imgUrl: "/placeholders/hero-2.jpg" },
+  { imgUrl: "/placeholders/hero-3.jpg" },
 ];
 
 export function HeroParallax() {
+  const { t } = useTranslation();
+
+  const mergedBlocks: ParallaxBlock[] = internalBlocks.map((b, i) => ({
+    ...b,
+    ...t.hero.blocks[i],
+  }));
+
   return (
-    <div className="bg-[#05080f]">
+    <div className="bg-white dark:bg-[#05080f]">
       {/* Hero headline fixo antes do parallax */}
       <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20">
         <span className="text-xs font-semibold uppercase tracking-widest text-[#22c55e] mb-4">
-          Método INTEGR8 · Protocolo C.O.R.E. 8
+          {t.hero.eyebrow}
         </span>
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white max-w-3xl leading-[1.05]">
-          Mais energia,<br />corpo que responde.
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white max-w-3xl leading-[1.05]">
+          {t.hero.headline.split("\n").map((line, i, arr) => (
+            <React.Fragment key={i}>
+              {line}
+              {i < arr.length - 1 && <br />}
+            </React.Fragment>
+          ))}
         </h1>
-        <p className="mt-6 text-lg md:text-xl text-[#64748b] max-w-xl leading-relaxed">
-          Sem abrir mão da vida que você já tem.
+        <p className="mt-6 text-lg md:text-xl text-slate-500 dark:text-[#64748b] max-w-xl leading-relaxed">
+          {t.hero.sub}
         </p>
         <a
           href="#como-funciona"
           className="mt-10 inline-flex items-center gap-2 bg-[#22c55e] text-black font-bold px-8 py-3.5 rounded-full hover:bg-[#16a34a] transition-colors text-sm"
         >
-          Quero entender <FiArrowRight />
+          {t.hero.cta} <FiArrowRight />
         </a>
       </div>
 
       {/* Parallax blocks */}
       <div id="como-funciona">
-        {blocks.map((block, i) => (
+        {mergedBlocks.map((block, i) => (
           <ParallaxSection key={i} {...block} />
         ))}
       </div>
@@ -102,7 +99,7 @@ function StickyImage({ imgUrl }: { imgUrl: string }) {
       className="sticky z-0 overflow-hidden rounded-3xl"
     >
       <motion.div
-        className="absolute inset-0 bg-[#05080f]/60"
+        className="absolute inset-0 bg-white/60 dark:bg-[#05080f]/60"
         style={{ opacity }}
       />
     </motion.div>
@@ -132,7 +129,7 @@ function OverlayCopy({
     <motion.div
       style={{ y, opacity }}
       ref={targetRef}
-      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white px-6 text-center"
+      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-slate-900 dark:text-white px-6 text-center"
     >
       <p className="mb-3 text-[#22c55e] font-semibold text-sm md:text-base uppercase tracking-widest">
         {subheading}
@@ -153,11 +150,11 @@ function BlockContent({
 }) {
   return (
     <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
-      <h2 className="col-span-1 text-2xl font-bold md:col-span-4 text-white">
+      <h2 className="col-span-1 text-2xl font-bold md:col-span-4 text-slate-900 dark:text-white">
         {heading}
       </h2>
       <div className="col-span-1 md:col-span-8">
-        <p className="text-lg text-[#64748b] leading-relaxed">{body}</p>
+        <p className="text-lg text-slate-500 dark:text-[#64748b] leading-relaxed">{body}</p>
       </div>
     </div>
   );
