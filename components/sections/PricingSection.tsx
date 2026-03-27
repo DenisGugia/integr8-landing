@@ -1,7 +1,8 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { plans } from "@/data/pricing";
-import type { Plan } from "@/data/pricing";
+import { useTranslation } from "@/lib/i18n/context";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { cn } from "@/lib/utils";
 
@@ -24,8 +25,11 @@ const CheckIcon = ({ className }: { className?: string }) => (
 );
 
 // WebGL animated background
-function ShaderCanvas() {
+function ShaderCanvas({ theme }: { theme: string | undefined }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const glRef = useRef<WebGLRenderingContext | null>(null);
+  const programRef = useRef<WebGLProgram | null>(null);
+  const uBgColorRef = useRef<WebGLUniformLocation | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,6 +42,7 @@ function ShaderCanvas() {
       precision highp float;
       uniform float iTime;
       uniform vec2 iResolution;
+      uniform vec3 uBgColor;
       mat2 rotate2d(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
       float variation(vec2 v1,vec2 v2,float strength,float speed){ return sin(dot(normalize(v1),normalize(v2))*strength+iTime*speed)/100.0; }
       vec3 paintCircle(vec2 uv,vec2 center,float rad,float width){
@@ -58,7 +63,7 @@ function ShaderCanvas() {
         mask+=paintCircle(uv,center,radius+.018,.005).r;
         vec2 v=rotate2d(iTime)*uv;
         vec3 fgColor=vec3(v.x*0.1,v.y*0.3+0.1,.7-v.y*v.x);
-        vec3 bgColor=vec3(0.02,0.03,0.06);
+        vec3 bgColor=uBgColor;
         vec3 color=mix(bgColor,fgColor,mask);
         color=mix(color,vec3(0.13,0.77,0.37),paintCircle(uv,center,radius,.003).r);
         gl_FragColor=vec4(color,1.);
@@ -76,6 +81,19 @@ function ShaderCanvas() {
     gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fragSrc));
     gl.linkProgram(program);
     gl.useProgram(program);
+
+    glRef.current = gl;
+    programRef.current = program;
+    uBgColorRef.current = gl.getUniformLocation(program, "uBgColor");
+
+    // Set initial bg color based on current theme
+    if (uBgColorRef.current) {
+      if (theme === "dark") {
+        gl.uniform3f(uBgColorRef.current, 0.02, 0.03, 0.06); // #05080f
+      } else {
+        gl.uniform3f(uBgColorRef.current, 0.97, 0.98, 0.99); // ~#f8fafc
+      }
+    }
 
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -113,8 +131,24 @@ function ShaderCanvas() {
     return () => {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animId);
+      glRef.current = null;
+      programRef.current = null;
+      uBgColorRef.current = null;
     };
   }, []);
+
+  // Update uBgColor uniform on theme change
+  useEffect(() => {
+    const gl = glRef.current;
+    const loc = uBgColorRef.current;
+    if (!gl || !loc) return;
+    if (programRef.current) gl.useProgram(programRef.current);
+    if (theme === "dark") {
+      gl.uniform3f(loc, 0.02, 0.03, 0.06); // #05080f
+    } else {
+      gl.uniform3f(loc, 0.97, 0.98, 0.99); // ~#f8fafc
+    }
+  }, [theme]);
 
   return (
     <canvas
@@ -125,6 +159,23 @@ function ShaderCanvas() {
 }
 
 // Pricing Card
+interface MergedPlan {
+  price: string;
+  priceAVista?: string;
+  isPopular?: boolean;
+  buttonVariant?: "primary" | "secondary";
+  whatsappLink: string;
+  planName: string;
+  description: string;
+  features: string[];
+  buttonText: string;
+  perMonth: string;
+  avista: string;
+  avistaSuffix: string;
+  popular: string;
+  currency: string;
+}
+
 function PricingCard({
   planName,
   description,
@@ -135,10 +186,15 @@ function PricingCard({
   isPopular = false,
   buttonVariant = "primary",
   whatsappLink,
-}: Plan) {
+  perMonth,
+  avista,
+  avistaSuffix,
+  popular,
+  currency,
+}: MergedPlan) {
   const cardClass = cn(
     "backdrop-blur-[14px] rounded-2xl shadow-xl flex-1 max-w-xs px-7 py-8 flex flex-col transition-all duration-300 relative",
-    "bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10",
+    "bg-gradient-to-br from-white/5 to-white/[0.02] border border-slate-200 dark:border-white/10",
     isPopular &&
       "scale-105 ring-2 ring-[#22c55e]/30 from-white/10 to-white/5 border-[#22c55e]/30 shadow-2xl"
   );
@@ -147,27 +203,27 @@ function PricingCard({
     "mt-auto w-full py-3 rounded-xl font-semibold text-sm transition-all",
     buttonVariant === "primary"
       ? "bg-[#22c55e] hover:bg-[#16a34a] text-black"
-      : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
+      : "bg-white/10 hover:bg-white/20 text-slate-900 dark:text-white border border-slate-200 dark:border-white/20"
   );
 
   return (
     <div className={cardClass}>
       {isPopular && (
         <div className="absolute -top-4 right-4 px-3 py-1 text-[11px] font-bold rounded-full bg-[#22c55e] text-black">
-          Mais popular
+          {popular}
         </div>
       )}
       <div className="mb-3">
-        <h2 className="text-4xl font-extralight tracking-tight text-white">{planName}</h2>
+        <h2 className="text-4xl font-extralight tracking-tight text-slate-900 dark:text-white">{planName}</h2>
         <p className="text-sm text-white/60 mt-1">{description}</p>
       </div>
       <div className="my-5 flex items-baseline gap-2">
-        <span className="text-4xl font-extralight text-white">CAD$ {price}</span>
-        <span className="text-xs text-white/50">/mês</span>
+        <span className="text-4xl font-extralight text-slate-900 dark:text-white">{currency} {price}</span>
+        <span className="text-xs text-white/50">{perMonth}</span>
       </div>
       {priceAVista && (
         <p className="text-xs text-white/40 mb-3">
-          À vista: CAD$ {priceAVista}
+          {avista} {priceAVista}{avistaSuffix}
         </p>
       )}
       <div className="w-full mb-4 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
@@ -196,23 +252,33 @@ function PricingCard({
 
 // Main export
 export function PricingSection() {
+  const { t } = useTranslation();
+  const { resolvedTheme } = useTheme();
+
+  const mergedPlans = plans.map((p, i) => ({
+    ...p,
+    ...t.pricing.plans[i],
+    perMonth: t.pricing.perMonth,
+    avista: t.pricing.avista,
+    avistaSuffix: t.pricing.avistaSuffix,
+    popular: t.pricing.popular,
+    currency: t.pricing.currency,
+  }));
+
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center px-4 py-16 bg-[#05080f]">
-      <ShaderCanvas />
+    <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center px-4 py-16 bg-white dark:bg-[#05080f]">
+      <ShaderCanvas theme={resolvedTheme} />
       <div className="relative z-10 w-full max-w-5xl mx-auto text-center mb-14">
         <span className="text-xs font-semibold uppercase tracking-widest text-[#22c55e]">
-          Investimento
+          {t.pricing.eyebrow}
         </span>
-        <h2 className="text-4xl md:text-6xl font-extralight leading-tight tracking-tight text-white mt-3">
-          Protocolo C.O.R.E. 8{" "}
-          <span className="text-[#22c55e]">· 16 semanas</span>
+        <h2 className="text-4xl md:text-6xl font-extralight leading-tight tracking-tight text-slate-900 dark:text-white mt-3">
+          {t.pricing.headline.split(" · ")[0]}{" "}
+          <span className="text-[#22c55e]">· {t.pricing.headline.split(" · ")[1]}</span>
         </h2>
-        <p className="mt-3 text-base md:text-lg text-white/60 max-w-2xl mx-auto">
-          Acompanhamento com um coach real. Não um app. Não uma planilha no grupo do WhatsApp.
-        </p>
       </div>
       <div className="relative z-10 flex flex-col md:flex-row gap-8 md:gap-5 justify-center items-center w-full max-w-4xl">
-        {plans.map((plan) => (
+        {mergedPlans.map((plan) => (
           <PricingCard key={plan.planName} {...plan} />
         ))}
       </div>
