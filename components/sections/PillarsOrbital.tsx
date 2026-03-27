@@ -6,11 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { pillars } from "@/data/pillars";
 import type { Pillar } from "@/data/pillars";
+import { useTranslation } from "@/lib/i18n/context";
+
+type MergedPillar = Pillar & {
+  title: string;
+  shortTitle: string;
+  date: string;
+  content: string;
+};
 
 function RadialOrbitalTimeline({
   timelineData,
 }: {
-  timelineData: Pillar[];
+  timelineData: MergedPillar[];
 }) {
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
   const [rotationAngle, setRotationAngle] = useState<number>(0);
@@ -20,6 +28,8 @@ function RadialOrbitalTimeline({
   const containerRef = useRef<HTMLDivElement>(null);
   const orbitRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+  const { t } = useTranslation();
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === containerRef.current || e.target === orbitRef.current) {
@@ -94,16 +104,16 @@ function RadialOrbitalTimeline({
 
   const getStatusStyles = (status: Pillar["status"]): string => {
     switch (status) {
-      case "completed": return "text-white bg-black border-white";
-      case "in-progress": return "text-black bg-white border-black";
-      case "pending": return "text-white bg-black/40 border-white/50";
-      default: return "text-white bg-black/40 border-white/50";
+      case "completed": return "text-slate-900 dark:text-white bg-white dark:bg-black border-slate-900 dark:border-white";
+      case "in-progress": return "text-white dark:text-black bg-black dark:bg-white border-white dark:border-black";
+      case "pending": return "text-slate-900 dark:text-white bg-black/10 dark:bg-black/40 border-slate-400 dark:border-white/50";
+      default: return "text-slate-900 dark:text-white bg-black/10 dark:bg-black/40 border-slate-400 dark:border-white/50";
     }
   };
 
   return (
     <div
-      className="w-full h-screen flex flex-col items-center justify-center bg-[#05080f] overflow-hidden"
+      className="w-full h-screen flex flex-col items-center justify-center bg-white dark:bg-[#05080f] overflow-hidden"
       ref={containerRef}
       onClick={handleContainerClick}
     >
@@ -115,12 +125,12 @@ function RadialOrbitalTimeline({
         >
           {/* Center: orbit rings + center node */}
           <div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-[#22c55e] via-[#3b82f6] to-[#22c55e] animate-pulse flex items-center justify-center z-10">
-            <div className="absolute w-20 h-20 rounded-full border border-white/20 animate-ping opacity-70" />
-            <div className="absolute w-24 h-24 rounded-full border border-white/10 animate-ping opacity-50" style={{ animationDelay: "0.5s" }} />
+            <div className="absolute w-20 h-20 rounded-full border border-slate-200 dark:border-white/20 animate-ping opacity-70" />
+            <div className="absolute w-24 h-24 rounded-full border border-slate-200 dark:border-white/10 animate-ping opacity-50" style={{ animationDelay: "0.5s" }} />
             <div className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md" />
           </div>
 
-          <div className="absolute w-96 h-96 rounded-full border border-white/10" />
+          <div className="absolute w-96 h-96 rounded-full border border-slate-200 dark:border-white/10" />
 
           {timelineData.map((item, index) => {
             const position = calculateNodePosition(index, timelineData.length);
@@ -154,45 +164,45 @@ function RadialOrbitalTimeline({
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 transform
                     ${isExpanded ? "bg-[#22c55e] text-black border-[#22c55e] scale-150 shadow-lg shadow-[#22c55e]/30"
-                    : isRelated ? "bg-white/50 text-black border-white animate-pulse"
-                    : "bg-[#05080f] text-white border-white/40"}`}
+                    : isRelated ? "bg-slate-200 dark:bg-white/50 text-black border-slate-400 dark:border-white animate-pulse"
+                    : "bg-white dark:bg-[#05080f] text-slate-900 dark:text-white border-slate-300 dark:border-white/40"}`}
                 >
                   <Icon size={16} />
                 </div>
-                <div className={`absolute top-12 whitespace-nowrap text-xs font-semibold tracking-wider transition-all duration-300 ${isExpanded ? "text-white scale-125" : "text-white/70"}`}>
+                <div className={`absolute top-12 whitespace-nowrap text-xs font-semibold tracking-wider transition-all duration-300 ${isExpanded ? "text-slate-900 dark:text-white scale-125" : "text-slate-500 dark:text-white/70"}`}>
                   {item.shortTitle}
                 </div>
 
                 {isExpanded && (
-                  <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-64 bg-[#0d1117]/90 backdrop-blur-lg border-[#1e293b] shadow-xl overflow-visible">
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/50" />
+                  <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-64 bg-slate-50/90 dark:bg-[#0d1117]/90 backdrop-blur-lg border-slate-200 dark:border-[#1e293b] shadow-xl overflow-visible">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-slate-300 dark:bg-white/50" />
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-center">
                         <Badge className={`px-2 text-xs ${getStatusStyles(item.status)}`}>
-                          {item.status === "completed" ? "ATIVO" : item.status === "in-progress" ? "EM PROGRESSO" : "PENDENTE"}
+                          {t.pillars.statusLabels[item.status]}
                         </Badge>
-                        <span className="text-xs font-mono text-white/50">{item.date}</span>
+                        <span className="text-xs font-mono text-slate-500 dark:text-white/50">{item.date}</span>
                       </div>
-                      <CardTitle className="text-sm mt-2 text-white">{item.title}</CardTitle>
+                      <CardTitle className="text-sm mt-2 text-slate-900 dark:text-white">{item.title}</CardTitle>
                     </CardHeader>
-                    <CardContent className="text-xs text-white/80">
+                    <CardContent className="text-xs text-slate-600 dark:text-white/80">
                       <p>{item.content}</p>
-                      <div className="mt-4 pt-3 border-t border-white/10">
+                      <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/10">
                         <div className="flex justify-between items-center text-xs mb-1">
                           <span className="flex items-center gap-1">
                             <Zap size={10} className="text-[#22c55e]" /> Intensidade
                           </span>
                           <span className="font-mono text-[#22c55e]">{item.energy}%</span>
                         </div>
-                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-full h-1 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-[#22c55e] to-[#3b82f6]" style={{ width: `${item.energy}%` }} />
                         </div>
                       </div>
                       {item.relatedIds.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-white/10">
+                        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/10">
                           <div className="flex items-center mb-2 gap-1">
-                            <Link size={10} className="text-white/70" />
-                            <h4 className="text-xs uppercase tracking-wider font-medium text-white/70">Pilares conectados</h4>
+                            <Link size={10} className="text-slate-400 dark:text-white/70" />
+                            <h4 className="text-xs uppercase tracking-wider font-medium text-slate-500 dark:text-white/70">Pilares conectados</h4>
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {item.relatedIds.map((relatedId) => {
@@ -202,11 +212,11 @@ function RadialOrbitalTimeline({
                                   key={relatedId}
                                   variant="outline"
                                   size="sm"
-                                  className="flex items-center h-6 px-2 py-0 text-xs rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
+                                  className="flex items-center h-6 px-2 py-0 text-xs rounded-none border-slate-200 dark:border-white/20 bg-transparent hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white transition-all"
                                   onClick={(e) => { e.stopPropagation(); toggleItem(relatedId); }}
                                 >
                                   {relatedItem?.shortTitle}
-                                  <ArrowRight size={8} className="ml-1 text-white/60" />
+                                  <ArrowRight size={8} className="ml-1 text-slate-400 dark:text-white/60" />
                                 </Button>
                               );
                             })}
@@ -226,20 +236,27 @@ function RadialOrbitalTimeline({
 }
 
 export function PillarsOrbital() {
+  const { t } = useTranslation();
+
+  const mergedPillars: MergedPillar[] = pillars.map((p, i) => ({
+    ...p,
+    ...t.pillars.items[i],
+  }));
+
   return (
-    <section className="bg-[#05080f]">
+    <section className="bg-white dark:bg-[#05080f]">
       <div className="max-w-5xl mx-auto text-center pt-16 px-6">
         <span className="text-xs font-semibold uppercase tracking-widest text-[#22c55e]">
-          Os 8 Pilares
+          {t.pillars.eyebrow}
         </span>
-        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mt-3">
-          Protocolo C.O.R.E. 8
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mt-3">
+          {t.pillars.headline}
         </h2>
-        <p className="text-[#64748b] mt-4 max-w-xl mx-auto">
+        <p className="text-slate-500 dark:text-[#64748b] mt-4 max-w-xl mx-auto">
           Clique em qualquer pilar para ver como ele funciona no seu protocolo.
         </p>
       </div>
-      <RadialOrbitalTimeline timelineData={pillars} />
+      <RadialOrbitalTimeline timelineData={mergedPillars} />
     </section>
   );
 }
