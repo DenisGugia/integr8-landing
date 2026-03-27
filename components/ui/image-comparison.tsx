@@ -25,6 +25,7 @@ export type ImageComparisonProps = {
   className?: string;
   enableHover?: boolean;
   springOptions?: SpringOptions;
+  controlledPosition?: MotionValue<number>;
 };
 
 const DEFAULT_SPRING_OPTIONS = { bounce: 0, duration: 0 };
@@ -34,29 +35,29 @@ export function ImageComparison({
   className,
   enableHover,
   springOptions,
+  controlledPosition,
 }: ImageComparisonProps) {
   const [isDragging, setIsDragging] = useState(false);
-  const motionValue = useMotionValue(50);
-  const motionSliderPosition = useSpring(
-    motionValue,
+  const internalMotionValue = useMotionValue(50);
+  const internalSpring = useSpring(
+    internalMotionValue,
     springOptions ?? DEFAULT_SPRING_OPTIONS
   );
+  const motionSliderPosition = controlledPosition ?? internalSpring;
   const [sliderPosition, setSliderPosition] = useState(50);
 
+  const isControlled = !!controlledPosition;
+
   const handleDrag = (event: React.MouseEvent | React.TouchEvent) => {
+    if (isControlled) return;
     if (!isDragging && !enableHover) return;
-    const containerRect = (
-      event.currentTarget as HTMLElement
-    ).getBoundingClientRect();
+    const containerRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     const x =
       "touches" in event
         ? event.touches[0].clientX - containerRect.left
         : (event as React.MouseEvent).clientX - containerRect.left;
-    const percentage = Math.min(
-      Math.max((x / containerRect.width) * 100, 0),
-      100
-    );
-    motionValue.set(percentage);
+    const percentage = Math.min(Math.max((x / containerRect.width) * 100, 0), 100);
+    internalMotionValue.set(percentage);
     setSliderPosition(percentage);
   };
 
@@ -67,16 +68,16 @@ export function ImageComparison({
       <div
         className={cn(
           "relative overflow-hidden select-none",
-          enableHover && "cursor-ew-resize",
+          enableHover && !isControlled && "cursor-ew-resize",
           className
         )}
         onMouseMove={handleDrag}
-        onMouseDown={() => !enableHover && setIsDragging(true)}
-        onMouseUp={() => !enableHover && setIsDragging(false)}
-        onMouseLeave={() => !enableHover && setIsDragging(false)}
+        onMouseDown={() => !enableHover && !isControlled && setIsDragging(true)}
+        onMouseUp={() => !enableHover && !isControlled && setIsDragging(false)}
+        onMouseLeave={() => !enableHover && !isControlled && setIsDragging(false)}
         onTouchMove={handleDrag}
-        onTouchStart={() => !enableHover && setIsDragging(true)}
-        onTouchEnd={() => !enableHover && setIsDragging(false)}
+        onTouchStart={() => !enableHover && !isControlled && setIsDragging(true)}
+        onTouchEnd={() => !enableHover && !isControlled && setIsDragging(false)}
       >
         {children}
       </div>
