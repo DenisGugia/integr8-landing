@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "@/lib/i18n/context";
 import { galleryImages } from "@/data/gallery-images";
 
 const WA = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
@@ -16,22 +17,7 @@ function shuffle<T>(array: T[]): T[] {
 
 function ShuffleGrid() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [squares, setSquares] = useState(() =>
-    shuffle(galleryImages).map((img) => (
-      <motion.div
-        key={img.id}
-        layout
-        transition={{ duration: 1.5, type: "spring" }}
-        className="w-full h-full rounded-sm"
-        style={{
-          backgroundImage: `url(${img.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundColor: "#1e293b",
-        }}
-      />
-    ))
-  );
+  const [squares, setSquares] = useState<React.ReactNode[]>([]);
 
   const shuffleSquares = () => {
     setSquares(
@@ -45,7 +31,7 @@ function ShuffleGrid() {
             backgroundImage: `url(${img.src})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundColor: "#1e293b",
+            backgroundColor: "var(--surface)",
           }}
         />
       ))
@@ -69,19 +55,20 @@ function ShuffleGrid() {
 }
 
 export function LifestyleGallery() {
+  const { t } = useTranslation();
+
   return (
-    <section className="w-full px-6 py-24 bg-[#0d1117]">
+    <section className="w-full px-6 py-24 bg-slate-50 dark:bg-[#0d1117]">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-16 max-w-5xl mx-auto">
         <div>
           <span className="text-xs font-semibold uppercase tracking-widest text-[#22c55e]">
-            A rotina que você já tem
+            {t.lifestyle.eyebrow}
           </span>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mt-3 mb-6 leading-tight">
-            Com mais energia.
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white mt-3 mb-6 leading-tight">
+            {t.lifestyle.headline}
           </h2>
-          <p className="text-[#64748b] text-lg leading-relaxed mb-8">
-            O C.O.R.E. 8 não pede que você abra mão de nada. Ele cabe na semana
-            que você já tem — reunião às 18h, filho que precisa de você às 19h, jantar real.
+          <p className="text-slate-500 dark:text-[#64748b] text-lg leading-relaxed mb-8">
+            {t.lifestyle.body}
           </p>
           <a
             href={WA}
@@ -89,7 +76,7 @@ export function LifestyleGallery() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#22c55e] text-black font-bold px-8 py-3.5 rounded-full hover:bg-[#16a34a] transition-colors text-sm"
           >
-            Quero começar meu protocolo →
+            {t.lifestyle.cta} →
           </a>
         </div>
         <ShuffleGrid />
