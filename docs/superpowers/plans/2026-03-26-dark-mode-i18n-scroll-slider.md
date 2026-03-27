@@ -1046,11 +1046,11 @@ export function ImageComparison({
 }: ImageComparisonProps) {
   const [isDragging, setIsDragging] = useState(false);
   const internalMotionValue = useMotionValue(50);
-  const internalSpring = useSpring(
+  const internalSpring = useSpring(         // ← declared here, used two lines below
     internalMotionValue,
     springOptions ?? DEFAULT_SPRING_OPTIONS
   );
-  const motionSliderPosition = controlledPosition ?? internalSpring;
+  const motionSliderPosition = controlledPosition ?? internalSpring; // ← now safe
   const [sliderPosition, setSliderPosition] = useState(50);
 
   const isControlled = !!controlledPosition;
@@ -1122,9 +1122,18 @@ Open `components/sections/BeforeAfterSection.tsx`. Note:
 - Current section background color
 - Any text currently referencing "arraste" or drag interaction
 
-- [ ] **Step 2: Apply scroll-driven animation**
+- [ ] **Step 2: Extract elements to preserve from the original file**
 
-Replace the component content keeping all existing entrance animations. Add `useRef` + `useScroll` + `useTransform`:
+Before replacing anything, copy from the current file:
+- Any `motion.div` entrance animations (`initial`, `whileInView`, `variants`, `transition`) not already in the template below
+- Any section-level class names or layout wrappers that differ from the template
+- Any additional text elements or UI not captured in `t.beforeAfter.*`
+
+Keep these noted — you will reinsert them into the new template in the next step.
+
+- [ ] **Step 3: Replace the component with scroll-driven version, reinserting preserved elements**
+
+Add `useRef` + `useScroll` + `useTransform`. The template below uses a `motion.div` entrance animation on the heading block — adjust or add back any other animations you noted in Step 2:
 
 ```tsx
 "use client";
@@ -1206,13 +1215,13 @@ export function BeforeAfterSection() {
 
 If the original file had additional entrance animations or content not shown here, add them back.
 
-- [ ] **Step 3: Verify**
+- [ ] **Step 4: Verify**
 
 ```bash
 npx tsc --noEmit 2>&1 | head -20
 ```
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add components/sections/BeforeAfterSection.tsx
@@ -1617,6 +1626,8 @@ useEffect(() => {
 
 - [ ] **Step 5: Migrate data/pricing.ts — remove string fields**
 
+⚠️ Do NOT run `tsc` between Step 5 and Step 6. After removing fields from `data/pricing.ts`, TypeScript will error until Step 6 adds the merge in `PricingSection.tsx`. Run `tsc` only in Step 7, after both files are updated.
+
 Prices (`price`, `priceAVista`) stay in the data file since they are locale-invariant numbers. Only text strings move to translations.
 
 ```ts
@@ -1694,11 +1705,7 @@ const { t } = useTranslation();
 Replace eyebrow, headline, guarantee title/body, CTA headline/body/button with `t.faq.*`.
 Apply dark mode mapping to all color classes.
 
-- [ ] **Step 3: Delete data/faq.ts**
-
-```bash
-rm C:/Users/denis/integr8-landing/data/faq.ts
-```
+- [ ] **Step 3: Stage deletion of data/faq.ts (do this in Step 6 with git rm — skip a plain `rm` here)**
 
 - [ ] **Step 4: Verify**
 
@@ -1717,6 +1724,8 @@ npm run build 2>&1 | tail -15
 Expected: `✓ Compiled successfully` with 0 errors.
 
 - [ ] **Step 6: Commit**
+
+Use `git rm` (not plain `rm`) to both delete the file from disk and stage the deletion in one command:
 
 ```bash
 git add components/sections/FaqCta.tsx
