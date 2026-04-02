@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslation } from "@/lib/i18n/context";
+import { Player } from "@remotion/player";
+import { AppShowcase } from "@/components/remotion/AppShowcase";
 
 const WA = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
 
@@ -252,20 +254,18 @@ export function AppCinematic() {
                       </div>
                     </div>
 
-                    {/* App screen image or placeholder */}
+                    {/* App screen animation */}
                     <div className="flex-1 rounded-xl overflow-hidden bg-slate-50 dark:bg-[#0d1117] border border-slate-200 dark:border-[#1e293b] flex items-center justify-center">
-                      <img
-                        src="/placeholders/app-screen.gif"
-                        alt="App INTEGR8"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = "none";
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `<div style="color:#475569;font-size:11px;text-align:center;padding:20px;">app screenshot<br/>aqui</div>`;
-                          }
-                        }}
+                      <Player
+                        component={AppShowcase}
+                        durationInFrames={600}
+                        fps={30}
+                        compositionWidth={390}
+                        compositionHeight={844}
+                        style={{ width: "100%", height: "100%" }}
+                        autoPlay
+                        loop
+                        controls={false}
                       />
                     </div>
 

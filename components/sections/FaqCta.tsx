@@ -7,6 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useTranslation } from "@/lib/i18n/context";
+import { Player } from "@remotion/player";
+import { CountdownTimer } from "@/components/remotion/CountdownTimer";
 
 const WA = "https://wa.me/12269617351";
 const WA_START = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
@@ -70,6 +72,29 @@ export function FaqCta() {
               </p>
             </div>
           </div>
+        </motion.div>
+      </section>
+
+      {/* Countdown Timer */}
+      <section className="max-w-2xl mx-auto px-6 py-16 flex justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-[600px]"
+        >
+          <Player
+            component={CountdownTimer}
+            durationInFrames={720}
+            fps={30}
+            compositionWidth={600}
+            compositionHeight={200}
+            style={{ width: "100%", height: "auto" }}
+            autoPlay
+            loop
+            controls={false}
+          />
         </motion.div>
       </section>
 
