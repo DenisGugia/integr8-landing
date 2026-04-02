@@ -5,13 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { MergedPillar } from './useOrbitalState';
 
+import { useTranslation } from '@/lib/i18n/context';
+
 interface NodeCardProps {
   item: MergedPillar;
   isExpanded: boolean;
 }
 
 export function NodeCard({ item, isExpanded }: NodeCardProps) {
+  const { t } = useTranslation();
   if (!isExpanded) return null;
+
+  const statusLabel = t.pillars.statusLabels[item.status] || item.status;
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -20,7 +25,7 @@ export function NodeCard({ item, isExpanded }: NodeCardProps) {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-2xl">{item.title}</CardTitle>
-              <Badge className={getStatusBadgeClass(item.status)}>{item.status}</Badge>
+              <Badge className={getStatusBadgeClass(item.status)}>{statusLabel}</Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -28,7 +33,7 @@ export function NodeCard({ item, isExpanded }: NodeCardProps) {
             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-800">
               <span className="text-sm text-gray-500">{item.date}</span>
               <Button size="sm" className="gap-2">
-                Learn More <ArrowRight size={16} />
+                {t.hero.cta} <ArrowRight size={16} />
               </Button>
             </div>
           </CardContent>

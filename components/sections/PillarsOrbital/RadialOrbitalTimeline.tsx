@@ -41,7 +41,7 @@ export function RadialOrbitalTimeline({ timelineData }: RadialOrbitalTimelinePro
 
   return (
     <div
-      className="w-full h-screen flex flex-col items-center justify-center bg-white dark:bg-[#05080f] overflow-hidden"
+      className="w-full min-h-[700px] flex flex-col items-center justify-center overflow-visible"
       ref={containerRef}
       onClick={handleContainerClick}
     >

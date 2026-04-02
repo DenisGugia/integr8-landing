@@ -18,6 +18,8 @@ export function HeroVideo({ eyebrow, headline, sub, cta }: HeroVideoProps) {
         <video
           autoPlay
           muted
+          loop
+          playsInline
           className="w-full h-full object-cover opacity-100"
           aria-hidden="true"
           style={{ display: 'block' }}

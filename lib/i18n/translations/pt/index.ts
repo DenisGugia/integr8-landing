@@ -1,7 +1,27 @@
-export * as nav from './nav';
-export * as hero from './hero';
-export * as identification from './identification';
-export * as comparison from './comparison';
-export * as pillars from './pillars';
-export * as pricing from './pricing';
-export * as faq from './faq';
+import { nav } from './nav';
+import { hero } from './hero';
+import { identification } from './identification';
+import { comparison } from './comparison';
+import { pillars } from './pillars';
+import { denis } from './denis';
+import { appCinematic } from './appCinematic';
+import { beforeAfter } from './beforeAfter';
+import { lifestyle } from './lifestyle';
+import { pricing } from './pricing';
+import { faq } from './faq';
+
+export const pt = {
+  nav,
+  hero,
+  identification,
+  comparison,
+  pillars,
+  denis,
+  appCinematic,
+  beforeAfter,
+  lifestyle,
+  pricing,
+  faq
+};
+
+export type Translations = typeof pt;

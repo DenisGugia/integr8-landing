@@ -118,7 +118,7 @@ export const AppShowcase = ({ isDark = true }: AppShowcaseProps) => {
               width: 'fit-content',
             }}
           >
-            ✓ FitBudd
+            ✓ INTEGR8
           </div>
 
           {/* Título da tela */}

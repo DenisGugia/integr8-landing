@@ -6,8 +6,10 @@ import dynamic from 'next/dynamic';
 const Player = dynamic(() => import('@remotion/player').then(m => ({ default: m.Player })), { ssr: false });
 const CountdownTimer = dynamic(() => import('@/components/remotion/CountdownTimer').then(m => ({ default: m.CountdownTimer })), { ssr: false });
 
-const WA_START = '{WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo';
-const WA = '{WA_ROUTES.contact}';
+import { WA_ROUTES } from "@/data/constants";
+
+const WA_START = `${WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo`;
+const WA = WA_ROUTES.contact;
 
 interface CtaFinalProps {
   ctaHeadline: string;

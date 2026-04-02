@@ -6,15 +6,16 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { useTranslation } from "@/lib/i18n/context";
 
-const WA = "{WA_ROUTES.contact}";
+import Link from "next/link";
+
+const WA = WA_ROUTES.contact;
 
 export function Navbar() {
   const { t } = useTranslation();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Utility bar */}
-      <div className="bg-slate-100/90 dark:bg-[#030509]/90 border-b border-slate-200/60 dark:border-slate-800/40 backdrop-blur-sm">
+      <nav aria-label="Barra de Utilidades" className="bg-slate-100/90 dark:bg-[#030509]/90 border-b border-slate-200/60 dark:border-slate-800/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 h-8 flex items-center justify-between">
           <LanguageSwitcher />
           <div className="flex items-center gap-3">
@@ -22,14 +23,13 @@ export function Navbar() {
             <ThemeToggle />
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Main nav */}
-      <div className="border-b border-slate-200/60 dark:border-[#1e293b]/60 bg-white/80 dark:bg-[#05080f]/80 backdrop-blur-md">
+      <nav aria-label="Navegação Principal" className="border-b border-slate-200/60 dark:border-[#1e293b]/60 bg-white/80 dark:bg-[#05080f]/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="font-black text-lg tracking-tighter text-slate-900 dark:text-white">
+          <Link href="/" className="font-black text-lg tracking-tighter text-slate-900 dark:text-white hover:opacity-80 transition-opacity">
             INTEGR<span className="text-[#22c55e]">8</span>
-          </span>
+          </Link>
           <a
             href={WA}
             target="_blank"
@@ -39,7 +39,7 @@ export function Navbar() {
             {t.nav.cta}
           </a>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

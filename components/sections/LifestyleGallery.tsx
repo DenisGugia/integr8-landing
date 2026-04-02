@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/lib/i18n/context";
 import { galleryImages } from "@/data/gallery-images";
 
-const WA = "{WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo";
+const WA = `${WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo`;
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
