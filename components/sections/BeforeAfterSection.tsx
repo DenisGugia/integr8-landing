@@ -2,11 +2,6 @@
 
 import { useRef } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
-import {
-  ImageComparison,
-  ImageComparisonImage,
-  ImageComparisonSlider,
-} from "@/components/ui/image-comparison";
 import { useTranslation } from "@/lib/i18n/context";
 
 export function BeforeAfterSection() {
@@ -15,10 +10,24 @@ export function BeforeAfterSection() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start center", "end center"],
+    // Começa a transição quando o componente está entrando na tela (20% do topo) 
+    // e termina quando chega ao centro
+    offset: ["start 0.8", "start 0.2"],
   });
 
-  const sliderPosition = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  // Opacidade da imagem "Depois"
+  const opacityAfter = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  // Estilos comuns para as imagens (baseado no documento de calibração)
+  const baseImageStyle: React.CSSProperties = {
+    position: "absolute",
+    width: "100%",
+    height: "auto",
+    top: "-5%",
+    right: "-3.7%",
+    objectFit: "cover",
+    display: "block",
+  };
 
   return (
     <section
@@ -44,28 +53,65 @@ export function BeforeAfterSection() {
           </p>
         </motion.div>
 
-        <ImageComparison
-          className="w-full aspect-[16/9] rounded-xl overflow-hidden"
-          controlledPosition={sliderPosition}
-        >
-          <ImageComparisonImage
-            src="/placeholders/casal-before.jpg"
+        <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-2xl bg-black">
+          {/* Imagem ANTES (base) */}
+          <motion.img
+            src="/assets/hero-antes.jpg"
             alt={t.beforeAfter.labelBefore}
-            position="left"
+            style={{
+              ...baseImageStyle,
+              transform: "translate(1.2%, -0.5%)",
+              zIndex: 1,
+            }}
           />
-          <ImageComparisonImage
-            src="/placeholders/casal-after.jpg"
-            alt={t.beforeAfter.labelAfter}
-            position="right"
-          />
-          <ImageComparisonSlider className="bg-[#22c55e] w-0.5">
-            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#22c55e] flex items-center justify-center pointer-events-none">
-              <span className="text-black text-xs font-bold select-none">◀▶</span>
-            </div>
-          </ImageComparisonSlider>
-        </ImageComparison>
 
-        <div className="flex justify-between mt-3 text-xs text-slate-500 font-semibold uppercase tracking-widest">
+          {/* Imagem DEPOIS (sobreposta com opacity) */}
+          <motion.img
+            src="/assets/hero-depois.jpg"
+            alt={t.beforeAfter.labelAfter}
+            style={{
+              ...baseImageStyle,
+              transform: "translate(0%, -0.2%)",
+              zIndex: 2,
+              opacity: opacityAfter,
+            }}
+          />
+
+          {/* Fades laterais para integração (opcional, mas solicitado no doc) */}
+          <div className="absolute inset-0 z-[5] pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+          </div>
+
+          {/* Badge Antes / Depois */}
+          <div className="absolute bottom-6 right-6 z-10 flex border border-white/10 rounded-full overflow-hidden bg-black/40 backdrop-blur-md">
+            <motion.div
+              className="text-[10px] font-bold uppercase tracking-wider px-4 py-2 transition-colors"
+              style={{
+                color: useTransform(opacityAfter, [0, 0.5], ["#ccff00", "rgba(255,255,255,0.4)"]),
+                backgroundColor: useTransform(opacityAfter, [0, 0.5], ["rgba(204,255,0,0.1)", "rgba(204,255,0,0)"])
+              }}
+            >
+              {t.beforeAfter.labelBefore}
+            </motion.div>
+            <motion.div
+              className="text-[10px] font-bold uppercase tracking-wider px-4 py-2 transition-colors"
+              style={{
+                color: useTransform(opacityAfter, [0.5, 1], ["rgba(255,255,255,0.4)", "#ccff00"]),
+                backgroundColor: useTransform(opacityAfter, [0.5, 1], ["rgba(204,255,0,0)", "rgba(204,255,0,0.1)"])
+              }}
+            >
+              {t.beforeAfter.labelAfter}
+            </motion.div>
+          </div>
+
+          {/* Indicador de "Scroll" para revelar */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 opacity-50">
+            <span className="text-[8px] uppercase tracking-[0.2em] text-white font-bold">Role para revelar</span>
+            <div className="w-px h-6 bg-gradient-to-b from-transparent to-white" />
+          </div>
+        </div>
+
+        <div className="flex justify-between mt-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest px-2">
           <span>{t.beforeAfter.labelBefore}</span>
           <span>{t.beforeAfter.labelAfter}</span>
         </div>
@@ -73,3 +119,4 @@ export function BeforeAfterSection() {
     </section>
   );
 }
+

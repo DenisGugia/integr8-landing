@@ -12,6 +12,7 @@ Landing page de vendas para o protocolo INTEGR8, um programa de coaching de fitn
 **Stack local:** `cd C:\Users\denis\integr8-landing && npm run dev` → http://localhost:3000
 **Build:** `npm run build`
 **Deploy:** GitHub → Vercel (ou pendente de configuração)
+**Último Relatório:** [docs/REPORTS/EXECUTION_REPORT_2026_04_02.md](file:///c:/Users/denis/integr8-landing/docs/REPORTS/EXECUTION_REPORT_2026_04_02.md)
 
 ---
 
