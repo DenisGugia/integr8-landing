@@ -1,3 +1,12 @@
 export const PRICING_CONFIG = {
-  containerClass: "relative z-10 flex flex-col md:flex-row gap-8 md:gap-5 justify-center items-center w-full max-w-4xl",
+  animation: {
+    duration: 0.3,
+    delay: 0.1,
+  },
+  grid: {
+    cols: 3,
+  },
+  spacing: {
+    gap: 'gap-8',
+  },
 };
