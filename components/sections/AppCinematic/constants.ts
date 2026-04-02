@@ -1,5 +1,3 @@
-export const WA = "https://wa.me/12269617351?text=Quero+começar+meu+protocolo";
-
 export const INJECTED_STYLES = `
   .gsap-reveal { visibility: hidden; }
 
@@ -53,3 +51,16 @@ export const INJECTED_STYLES = `
     box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.2), 0 20px 32px -6px rgba(34,197,94,0.5);
   }
 `;
+
+export const GSAP_CONFIG = {
+  scrollTrigger: {
+    start: 'top top',
+    end: '+=4000',
+    pin: true,
+    scrub: 1,
+  },
+  intro: {
+    duration: 1.4,
+    ease: 'expo.out',
+  },
+};

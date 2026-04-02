@@ -1,31 +1,22 @@
-"use client";
-import { useTranslation } from "@/lib/i18n/context";
-import { pillars } from "@/data/pillars";
-import { RadialOrbitalTimeline } from "./RadialOrbitalTimeline";
+'use client';
+
+import { pillars } from '@/data/pillars';
+import { useTranslation } from '@/lib/i18n/context';
+import { RadialOrbitalTimeline } from './RadialOrbitalTimeline';
+import type { MergedPillar } from './useOrbitalState';
 
 export function PillarsOrbital() {
   const { t } = useTranslation();
 
-  const mergedPillars = pillars.map((p, i) => {
-    const translated = t.pillars.items[i];
-    return {
-      id: String(p.id),
-      name: translated.title,
-      description: translated.content,
-    };
-  });
+  const mergedData: MergedPillar[] = pillars.map((pillar, index) => ({
+    ...pillar,
+    title: t.pillars.items[index]?.title || '',
+    shortTitle: t.pillars.items[index]?.shortTitle || '',
+    date: t.pillars.items[index]?.date || '',
+    content: t.pillars.items[index]?.content || '',
+  }));
 
-  return (
-    <section className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-16 bg-white dark:bg-[#05080f]">
-      <div className="relative z-10 w-full max-w-5xl mx-auto text-center mb-14">
-        <span className="text-xs font-semibold uppercase tracking-widest text-[#22c55e]">
-          {t.pillars.eyebrow}
-        </span>
-        <h2 className="text-4xl md:text-6xl font-extralight leading-tight tracking-tight text-slate-900 dark:text-white mt-3">
-          {t.pillars.headline}
-        </h2>
-      </div>
-      <RadialOrbitalTimeline pillars={mergedPillars} />
-    </section>
-  );
+  return <RadialOrbitalTimeline timelineData={mergedData} />;
 }
+
+export default PillarsOrbital;
