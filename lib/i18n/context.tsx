@@ -2,9 +2,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { pt, type Translations } from "./translations/pt";
-import { en } from "./translations/en";
-import { es } from "./translations/es";
+import { pt, type Translations } from './translations/pt';
+import { en } from './translations/en';
+import { es } from './translations/es';
 
 type Locale = "pt" | "en" | "es";
 const STORAGE_KEY = "integr8-locale";

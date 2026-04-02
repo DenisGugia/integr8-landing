@@ -1,10 +1,11 @@
 "use client";
+import { WA_ROUTES } from "@/data/constants";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/lib/i18n/context";
 import { galleryImages } from "@/data/gallery-images";
 
-const WA = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
+const WA = "{WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo";
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];

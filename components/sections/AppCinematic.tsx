@@ -1,13 +1,16 @@
 "use client";
 
+import { WA_ROUTES } from "@/data/constants";
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslation } from "@/lib/i18n/context";
-import { Player } from "@remotion/player";
-import { AppShowcase } from "@/components/remotion/AppShowcase";
+import dynamicImport from "next/dynamic";
 
-const WA = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
+const Player = dynamicImport(() => import("@remotion/player").then(m => ({ default: m.Player })), { ssr: false });
+const AppShowcase = dynamicImport(() => import("@/components/remotion/AppShowcase").then(m => ({ default: m.AppShowcase })), { ssr: false });
+
+const WA = "{WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo";
 
 const INJECTED_STYLES = `
   .gsap-reveal { visibility: hidden; }

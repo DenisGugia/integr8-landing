@@ -1,11 +1,12 @@
 // components/layout/Navbar.tsx
 "use client";
 
+import { WA_ROUTES } from "@/data/constants";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { useTranslation } from "@/lib/i18n/context";
 
-const WA = "https://wa.me/12269617351";
+const WA = "{WA_ROUTES.contact}";
 
 export function Navbar() {
   const { t } = useTranslation();

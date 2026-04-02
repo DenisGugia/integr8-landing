@@ -4,8 +4,6 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
 import { useTranslation } from "@/lib/i18n/context";
-import { Player } from "@remotion/player";
-import { HeroReel } from "@/components/remotion/HeroReel";
 
 const IMG_PADDING = 12;
 

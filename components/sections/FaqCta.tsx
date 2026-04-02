@@ -1,4 +1,5 @@
 "use client";
+import { WA_ROUTES } from "@/data/constants";
 import { motion } from "framer-motion";
 import {
   Accordion,
@@ -7,11 +8,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useTranslation } from "@/lib/i18n/context";
-import { Player } from "@remotion/player";
-import { CountdownTimer } from "@/components/remotion/CountdownTimer";
+import dynamicImport from "next/dynamic";
 
-const WA = "https://wa.me/12269617351";
-const WA_START = "https://wa.me/12269617351?text=Quero+come%C3%A7ar+meu+protocolo";
+const Player = dynamicImport(() => import("@remotion/player").then(m => ({ default: m.Player })), { ssr: false });
+const CountdownTimer = dynamicImport(() => import("@/components/remotion/CountdownTimer").then(m => ({ default: m.CountdownTimer })), { ssr: false });
+
+const WA = "{WA_ROUTES.contact}";
+const WA_START = "{WA_ROUTES.contact}?text=Quero+come%C3%A7ar+meu+protocolo";
 
 export function FaqCta() {
   const { t } = useTranslation();
