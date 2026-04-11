@@ -9,3 +9,6 @@ dist/
 .superpowers/
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+# Videos (large files — add later)
+public/videos/

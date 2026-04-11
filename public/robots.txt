@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# LLM crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://integr8.fit/sitemap.xml

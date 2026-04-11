@@ -33,11 +33,18 @@ export function CinematicCanvas() {
         <div ref={mainCardRef} className="app-main-card absolute inset-0 m-auto integr8-card rounded-3xl w-96 h-96 z-30 flex items-center justify-center">
           <div className="card-sheen" />
           <div ref={mockupRef} className="app-mockup-wrap relative w-full h-full" style={{ perspective: '1000px' }}>
-            <div className="iphone-bezel w-full h-full flex items-center justify-center rounded-3xl overflow-hidden">
-              <div className="screen-glare absolute inset-0" />
-              <Player component={AppShowcase} durationInFrames={240} compositionWidth={1080} compositionHeight={1920} fps={30} />
-            </div>
-          </div>
+            <div className="iphone-bezel w-full h-full flex items-center justify-center rounded-3xl overflow-hidden relative">
+              <div className="screen-glare absolute inset-0 z-10 pointer-events-none" />
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src="/videos/app-showcase-video.mp4" type="video/mp4" />
+              </video>
+            </div>          </div>
         </div>
 
         <div className="app-cta-wrap absolute bottom-16 left-1/2 -translate-x-1/2 z-40">
