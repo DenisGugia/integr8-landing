@@ -1,6 +1,7 @@
 import { LanguageProvider } from '@/components/LanguageToggle'
 import LanguageToggle from '@/components/LanguageToggle'
 import ThemeToggle from '@/components/ThemeToggle'
+import FontSizeToggle from '@/components/FontSizeToggle'
 import Hero from '@/components/Hero'
 import Identificacao from '@/components/Identificacao'
 import Absolvicao from '@/components/Absolvicao'
@@ -28,6 +29,7 @@ export default function Page() {
         }}
       >
         <LanguageToggle />
+        <FontSizeToggle />
         <ThemeToggle />
       </div>
       <main>

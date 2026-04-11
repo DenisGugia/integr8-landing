@@ -55,7 +55,15 @@ html {
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  font-weight: 450;
 }
+
+/* Font size scale — applied to main content only, toggles stay unscaled */
+html[data-font-size='large'] main,
+html[data-font-size='large'] footer { zoom: 1.12; }
+
+html[data-font-size='xlarge'] main,
+html[data-font-size='xlarge'] footer { zoom: 1.25; }
 
 body {
   overflow-x: hidden;
