@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integr8 · Protocolo C.O.R.E. 8</title>
+  <meta name="description" content="Método personalizado de treino e nutrição para quem quer mais energia e um corpo que acompanha a vida que você já tem. 16 semanas com Denis Gugia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --ink:           #1a1a1a;
+      --ink-light:     #4a4a4a;
+      --ink-muted:     #7a7a7a;
+      --cream:         #faf8f5;
+      --white:         #ffffff;
+      --warm-gray:     #f2f0ed;
+      --accent:        #c43e2a;
+      --accent-hover:  #a83520;
+      --accent-soft:   rgba(196,62,42,0.08);
+      --green:         #25a856;
+      --green-hover:   #1e8f48;
+      --overlay-light:  rgba(26,26,26,0.40);
+      --overlay-medium: rgba(26,26,26,0.55);
+      --overlay-dark:   rgba(26,26,26,0.72);
+      --max-w: 780px;
+      --pad-x: 40px;
+      --pad-y: 100px;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--cream);
+    }
+
+    img { max-width: 100%; display: block; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+    .label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    h1, h2, h3 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      line-height: 1.2;
+    }
+
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: 24px; }
+    h3 { font-size: clamp(1.2rem, 2.5vw, 1.5rem); margin-bottom: 12px; }
+
+    p { margin-bottom: 20px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad-x);
+    }
+
+    .section--white    { background: var(--white);    padding: var(--pad-y) var(--pad-x); }
+    .section--cream    { background: var(--cream);    padding: var(--pad-y) var(--pad-x); }
+    .section--warm     { background: var(--warm-gray); padding: var(--pad-y) var(--pad-x); }
+    .section--dark     { background: var(--ink);      padding: var(--pad-y) var(--pad-x); color: #e8e8e8; }
+    .section--cta      { background: var(--cream);    padding: var(--pad-y) var(--pad-x); }
+
+    .section--white .container,
+    .section--cream .container,
+    .section--warm .container,
+    .section--dark .container,
+    .section--cta .container { max-width: var(--max-w); margin: 0 auto; }
+
+    /* ─── BUTTONS ────────────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 18px 44px;
+      border-radius: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .btn--primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn--primary:hover { background: var(--accent-hover); }
+
+    .btn--outline {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+    }
+
+    .btn--outline-white {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.7);
+    }
+
+    .btn--outline-white:hover { border-color: #fff; }
+
+    .btn--whatsapp {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn--whatsapp:hover { background: var(--green-hover); }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    header {
+      background: var(--ink);
+      padding: 20px var(--pad-x);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .header-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      padding: 8px 20px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+
+    .header-cta:hover { background: var(--accent); color: #fff; }
+
+    /* ─── PARALLAX ───────────────────────────────────────────── */
+    .parallax {
+      position: relative;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .parallax::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .parallax .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: var(--pad-y) var(--pad-x);
+    }
+
+    .parallax .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    /* Hero */
+    .parallax--hero {
+      min-height: 95vh;
+      background-image: url('images/hero.webp');
+      background-color: #2a2a2a;
+    }
+
+    .parallax--hero::before {
+      background: linear-gradient(
+        to bottom,
+        rgba(26,26,26,0.35) 0%,
+        rgba(26,26,26,0.55) 60%,
+        rgba(26,26,26,0.75) 100%
+      );
+    }
+
+    /* Method */
+    .parallax--method {
+      background-image: url('images/method.png');
+      background-color: #3a3a3a;
+    }
+
+    .parallax--method::before { background: var(--overlay-medium); }
+
+    /* Life */
+    .parallax--life {
+      background-image: url('images/life.png');
+      background-color: #2c2c2c;
+    }
+
+    .parallax--life::before { background: var(--overlay-light); }
+
+    /* Pricing */
+    .parallax--pricing {
+      background-image: url('images/pricing.jpg');
+      background-color: #1a1a1a;
+    }
+
+    .parallax--pricing::before { background: var(--overlay-dark); }
+
+    /* ─── HERO CONTENT ───────────────────────────────────────── */
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      color: #fff;
+      margin-bottom: 24px;
+      max-width: 640px;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.82);
+      max-width: 520px;
+      margin-bottom: 12px;
+    }
+
+    .hero-tagline {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 0;
+    }
+
+    /* ─── CHECKLIST (Dores) ──────────────────────────────────── */
+    .checklist {
+      list-style: none;
+      margin: 28px 0 32px;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      font-size: 1.05rem;
+      color: var(--ink-light);
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+
+    .checklist li::before {
+      content: "×";
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: #fde8e5;
+      color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .checklist-closing {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 8px;
+    }
+
+    /* ─── COMPARISON TABLE ───────────────────────────────────── */
+    .compare-context {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.78);
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .compare-table th {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      text-align: left;
+    }
+
+    .compare-table th:first-child {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.55);
+      border-radius: 4px 0 0 0;
+    }
+
+    .compare-table th:last-child {
+      background: rgba(196,62,42,0.22);
+      color: rgba(255,255,255,0.9);
+      border-radius: 0 4px 0 0;
+    }
+
+    .compare-table td {
+      padding: 16px 20px;
+      font-size: 0.97rem;
+      vertical-align: top;
+    }
+
+    .compare-table tr:not(:last-child) td {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .compare-table td:first-child {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.55);
+      text-decoration: line-through;
+      text-decoration-color: rgba(255,255,255,0.2);
+    }
+
+    .compare-table td:last-child {
+      background: rgba(196,62,42,0.12);
+      color: rgba(255,255,255,0.92);
+      font-weight: 500;
+    }
+
+    /* ─── STEPS (Como funciona) ──────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 48px;
+      margin-top: 40px;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+    }
+
+    .step-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .step-body {
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .steps-note {
+      margin-top: 36px;
+      padding: 20px 24px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      font-style: italic;
+    }
+
+    /* ─── DENIS ──────────────────────────────────────────────── */
+    .denis-layout {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    .denis-photo {
+      flex-shrink: 0;
+      width: 200px;
+      height: 260px;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 4px;
+      background: #ccc;
+    }
+
+    .denis-photo-placeholder {
+      flex-shrink: 0;
+      width: 200px;
+      height: 260px;
+      background: #d8d5d0;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .denis-text { flex: 1; }
+
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 16px 24px;
+      margin: 24px 0;
+      background: rgba(0,0,0,0.04);
+      border-radius: 0 4px 4px 0;
+    }
+
+    blockquote p {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.08rem;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .denis-credentials {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      margin-top: 16px;
+    }
+
+    /* ─── CENAS (Decorado) ───────────────────────────────────── */
+    .scene h2 {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .scene-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 48px;
+    }
+
+    .scenes {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .scene-item {
+      border-left: 2px solid rgba(255,255,255,0.25);
+      padding-left: 24px;
+    }
+
+    .scene-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .scene-body {
+      font-size: 0.97rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    /* ─── PARA QUEM É ────────────────────────────────────────── */
+    .arrow-list {
+      list-style: none;
+      margin: 28px 0;
+    }
+
+    .arrow-list li {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      align-items: flex-start;
+      font-size: 1.02rem;
+      color: var(--ink-light);
+    }
+
+    .arrow-list li:last-child { border-bottom: none; }
+
+    .arrow-list li::before {
+      content: "→";
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .sub-block {
+      margin-top: 36px;
+      padding: 24px 28px;
+      background: var(--cream);
+      border-radius: 4px;
+      border-left: 3px solid var(--ink-muted);
+    }
+
+    .sub-block + .sub-block { margin-top: 20px; }
+
+    .sub-block h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .sub-block p {
+      font-size: 0.93rem;
+      color: var(--ink-light);
+      margin-bottom: 16px;
+    }
+
+    .btn--small {
+      padding: 12px 28px;
+      font-size: 0.78rem;
+    }
+
+    /* ─── FORA DO BRASIL ─────────────────────────────────────── */
+    .outside-brazil {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .outside-brazil h2 { margin-bottom: 20px; }
+
+    /* ─── PRICING ────────────────────────────────────────────── */
+    .pricing h2, .pricing .label { color: #fff; }
+
+    .pricing-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 8px;
+    }
+
+    .pricing-value {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 40px;
+    }
+
+    .price-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .price-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .price-card:hover { transform: translateY(-3px); }
+
+    .price-card--featured {
+      background: rgba(196,62,42,0.18);
+      border-color: rgba(196,62,42,0.5);
+      position: relative;
+    }
+
+    .price-card--featured::before {
+      content: "Mais popular";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 99px;
+    }
+
+    .price-period {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 12px;
+    }
+
+    .price-amount {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-amount span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .price-total {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .pricing-note {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .includes {
+      list-style: none;
+      margin: 0 0 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+    }
+
+    .includes li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.93rem;
+      color: rgba(255,255,255,0.80);
+    }
+
+    .includes li::before {
+      content: "✓";
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .pricing-ctas { text-align: center; }
+
+    /* ─── GARANTIA ───────────────────────────────────────────── */
+    .guarantee-card {
+      border: 1.5px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      padding: 40px 48px;
+      background: var(--cream);
+    }
+
+    .guarantee-card h2 {
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    /* ─── FAQ ────────────────────────────────────────────────── */
+    .faq-section h2 {
+      color: #fff;
+      margin-bottom: 40px;
+    }
+
+    .faq-list { list-style: none; }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      padding: 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.5;
+    }
+
+    .faq-question:hover { color: #fff; }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: rgba(255,255,255,0.55);
+      transition: transform 0.25s ease, border-color 0.25s;
+      line-height: 1;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 0 24px;
+      font-size: 0.97rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.75;
+    }
+
+    .faq-item.open .faq-answer { display: block; }
+
+    /* ─── CTA FINAL ──────────────────────────────────────────── */
+    .cta-final-body {
+      font-size: 1.08rem;
+      color: var(--ink-light);
+      max-width: 600px;
+      margin-bottom: 8px;
+    }
+
+    .cta-final-body strong {
+      color: var(--ink);
+    }
+
+    .cta-summary {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .cta-guarantee {
+      margin-top: 28px;
+      padding: 18px 24px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: #111;
+      padding: 32px var(--pad-x);
+      text-align: center;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.85rem;
+    }
+
+    /* ─── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      :root {
+        --pad-x: 24px;
+        --pad-y: 72px;
+      }
+
+      .parallax {
+        background-attachment: scroll;
+        min-height: 60vh;
+      }
+
+      .parallax--hero { min-height: 80vh; }
+
+      .steps { grid-template-columns: 1fr; gap: 28px; }
+
+      .denis-layout { flex-direction: column; gap: 28px; }
+      .denis-photo, .denis-photo-placeholder { width: 100%; height: 220px; }
+
+      .price-cards { grid-template-columns: 1fr; gap: 16px; }
+
+      .includes { grid-template-columns: 1fr; }
+
+      .btn-group { flex-direction: column; }
+
+      .btn { text-align: center; }
+
+      .guarantee-card { padding: 28px 24px; }
+
+      .header-cta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── 0. HEADER ──────────────────────────────────────────── -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        INTEGR8
+        <span>Protocolo C.O.R.E. 8</span>
+      </div>
+      <a href="#checkout" class="header-cta">Começar agora</a>
+    </div>
+  </header>
+
+  <!-- ─── 1. HERO (PARALLAX) ────────────────────────────────── -->
+  <section class="parallax parallax--hero hero">
+    <div class="content">
+      <div class="container">
+        <p class="hero-eyebrow">Método INTEGR8 · Protocolo C.O.R.E. 8</p>
+        <h1>Um método personalizado para quem quer mais energia e um corpo que acompanha a vida que você já tem.</h1>
+        <p class="hero-sub">Programas genéricos falham porque foram feitos para uma rotina que você não tem. O C.O.R.E. 8 começa por entender como você funciona. Só depois prescreve.</p>
+        <p class="hero-tagline">Para quem cuida de tudo. Menos de si.</p>
+        <div class="btn-group">
+          <a href="#identificacao" class="btn btn--primary">Quero entender isso ↓</a>
+          <a href="#whatsapp" class="btn btn--outline-white">Falar com o coach</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 2. IDENTIFICAÇÃO ──────────────────────────────────── -->
+  <section id="identificacao" class="section--white">
+    <div class="container">
+      <span class="label">Reconhecimento</span>
+      <p>Você não está sem energia porque é fraco ou porque não tem disciplina. Está sem energia porque o seu sistema está carregando mais do que foi desenhado para carregar — e ninguém nunca parou para mapear exatamente o que está acontecendo com o seu corpo.</p>
+      <p>A maioria das pessoas que chega até aqui já tentou alguma coisa. Academia por um tempo. Um app de treino. Uma dieta que funcionou para outra pessoa. Às vezes funcionou um pouco. Nunca durou.</p>
+      <p>Não porque você não teve esforço. Porque o programa não foi feito para a sua vida.</p>
+      <p>Você acorda cansado antes do dia começar. No meio da tarde a energia cai de um jeito que não é cansaço de trabalho — é o corpo pedindo socorro. Você olha para a agenda e não consegue ver onde um treino caberia sem tirar de algo que não dá para tirar.</p>
+      <p>E vai adiando. Não por preguiça. Porque qualquer solução que você encontrou até agora exigia uma versão da sua vida que você não tem.</p>
+      <p>O problema não é você. É que o programa precisa ser feito para a vida que você tem — não para a que gostaria de ter. Quando o protocolo for feito para você, a execução acontece.</p>
+    </div>
+  </section>
+
+  <!-- ─── 3. DORES / CHECKLIST ──────────────────────────────── -->
+  <section class="section--cream">
+    <div class="container">
+      <span class="label">O diagnóstico</span>
+      <h2>Você reconhece alguma dessas?</h2>
+      <ul class="checklist">
+        <li>Acorda e já está cansado antes do dia começar.</li>
+        <li>No meio da tarde, bate uma queda que não é cansaço de trabalho.</li>
+        <li>Não consegue ver onde um treino caberia sem tirar de algo que não dá para tirar.</li>
+        <li>Já tentou academia, esporte, treino online. Parou. Tempo, dinheiro e esforço no ralo.</li>
+        <li>"Deveria estar melhor" virou uma frase distante.</li>
+        <li>A consulta médica continua sendo adiada.</li>
+        <li>Você está sobrevivendo. Mas não está vivendo.</li>
+      </ul>
+      <p class="checklist-closing">Se alguma dessas bateu, o que vem a seguir é para você.</p>
+    </div>
+  </section>
+
+  <!-- ─── 4. O QUE MUDA (PARALLAX) ─────────────────────────── -->
+  <section class="parallax parallax--method">
+    <div class="content">
+      <div class="container">
+        <span class="label" style="color:rgba(255,255,255,0.55);">A diferença</span>
+        <p class="compare-context">A maioria de quem chega até aqui já tentou alguma coisa antes. Academia, app, personal por um tempo. Algum programa que começou bem e em algum momento parou. Não por falta de esforço. Por diferença estrutural.</p>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Programa comum</th>
+              <th>Protocolo C.O.R.E. 8</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Começa com o plano pronto. Você se adapta.</td>
+              <td>Começa entendendo como você funciona. O plano se adapta.</td>
+            </tr>
+            <tr>
+              <td>Semana que desanda: você perde o fio.</td>
+              <td>Semana que desanda: você ajusta. O protocolo continua.</td>
+            </tr>
+            <tr>
+              <td>Ao terminar, você volta para o zero.</td>
+              <td>Ao terminar, você tem a fórmula. Para sempre.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. COMO FUNCIONA / STEPS ─────────────────────────── -->
+  <section class="section--white">
+    <div class="container">
+      <span class="label">Na prática</span>
+      <h2>Como o protocolo funciona</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div>
+            <p class="step-title">Onboarding</p>
+            <p class="step-body">Mapeamos sua rotina, biologia e objetivos reais. Dias disponíveis, local de treino, histórico.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div>
+            <p class="step-title">Programa Base</p>
+            <p class="step-body">Você já treina com um programa feito para o seu objetivo e realidade. Ele coleta dados reais de como você se alimenta, dorme e responde ao estímulo.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div>
+            <p class="step-title">Protocolo Definitivo</p>
+            <p class="step-body">Com os dados reais, o protocolo definitivo é montado. Para a vida que você tem, não para a que gostaria de ter.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div>
+            <p class="step-title">Ajuste Contínuo</p>
+            <p class="step-body">A cada quinzena, o coach analisa o que os números mostram. O que funciona, continua. O que não funciona, muda.</p>
+          </div>
+        </div>
+      </div>
+      <p class="steps-note">Quando a semana desanda, você remeja e continua de onde parou. O protocolo não finge que imprevistos não existem.</p>
+    </div>
+  </section>
+
+  <!-- ─── 6. HISTÓRIA DO DENIS ──────────────────────────────── -->
+  <section class="section--warm">
+    <div class="container">
+      <span class="label">O coach</span>
+      <h2>Ele sabia exatamente o que fazer. Mas não conseguia aplicar na própria vida.</h2>
+      <div class="denis-layout">
+        <img src="images/denis.jpg" alt="Denis Gugia" class="denis-photo" onerror="this.style.display='none';document.getElementById('denis-placeholder').style.display='flex'">
+        <div id="denis-placeholder" class="denis-photo-placeholder" style="display:none">Foto do Denis<br>(em breve)</div>
+        <div class="denis-text">
+          <p>Denis Gugia passou mais de uma década estudando como o corpo humano responde ao treino, à nutrição e ao estresse do dia a dia. Formado, certificado, coordenador de academia. No papel, sabia de tudo.</p>
+          <p>Mas quando montou a própria empresa, teve filhos e precisou lidar com a vida de imigrante no Canadá, descobriu que saber o que fazer não é o mesmo que conseguir fazer.</p>
+          <p>Eram 23h. Ele tinha 30 minutos. Não sabia o que comer, estava com fome e sem vontade. O treino do dia não tinha acontecido.</p>
+          <p>Foi aí que entendeu o problema real: não era falta de conhecimento. Era falta de um sistema que funcionasse quando a vida não coopera.</p>
+          <p>O C.O.R.E. 8 nasceu dessa experiência. Não em teoria. De quem viveu o problema e precisou resolver para si antes de ajudar outros a resolverem.</p>
+          <blockquote>
+            <p>"Quando a programação do dia seguinte já está feita, não preciso decidir o que comer ou fazer com fome e sem vontade. Só cumpro o que foi planejado. A margem de erro diminui. A execução acontece."</p>
+          </blockquote>
+          <p class="denis-credentials">Personal trainer certificado · Coordenador de academia · Empresário · Pai · Imigrante. Alguém que viveu o problema antes de construir a solução.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 7. DECORADO / CENAS (PARALLAX) ───────────────────── -->
+  <section class="parallax parallax--life scene">
+    <div class="content">
+      <div class="container">
+        <span class="label" style="color:rgba(255,255,255,0.55);">O que muda</span>
+        <h2>Não vamos falar sobre quilos.</h2>
+        <p class="scene-sub">Vamos falar sobre o que muda quando o corpo começa a acompanhar.</p>
+        <div class="scenes">
+          <div class="scene-item">
+            <span class="scene-title">A manhã de sábado</span>
+            <p class="scene-body">Você acorda antes do despertador. Não porque algo incomodou: o corpo terminou de descansar. Sem cansaço nas pernas, sem sensação de que o dia já começou devendo. Você levanta porque quer.</p>
+          </div>
+          <div class="scene-item">
+            <span class="scene-title">A reunião de última hora</span>
+            <p class="scene-body">17h30, reunião que não estava no calendário. Você está presente, não gerenciando o cansaço, não contando minutos. É a mesma reunião de sempre. Mas agora é você no comando dela.</p>
+          </div>
+          <div class="scene-item">
+            <span class="scene-title">A brincadeira com os filhos</span>
+            <p class="scene-body">Seu filho pede para brincar. Você brinca de verdade. Corre, se joga, está lá. É ele que pede pausa primeiro.</p>
+          </div>
+          <div class="scene-item">
+            <span class="scene-title">A foto</span>
+            <p class="scene-body">Alguém tira uma foto. Você vê e não sente o impulso de pedir para deletar. Você sabe que está no caminho. Com um plano claro.</p>
+          </div>
+          <div class="scene-item">
+            <span class="scene-title">O jantar</span>
+            <p class="scene-body">Alguém oferece a sobremesa. Você pensa um segundo, não por culpa, só por preferência, e aceita. Porque sabe que cabe. Não é escapada. É escolha.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 8. PARA QUEM É ────────────────────────────────────── -->
+  <section class="section--white">
+    <div class="container">
+      <span class="label">Para você?</span>
+      <h2>O C.O.R.E. 8 é para você se:</h2>
+      <ul class="arrow-list">
+        <li>Sua rotina não para — qualquer programa que exija condições perfeitas vai para a gaveta na primeira semana difícil.</li>
+        <li>Você já tentou e não manteve. Chegou à conclusão de que o problema é você. Não é.</li>
+        <li>Você quer entender o que está acontecendo no seu corpo, não só receber planilha.</li>
+        <li>Você quer resultado que sobrevive quando a vida complica.</li>
+      </ul>
+      <div class="sub-block">
+        <h3>Quer resultado em menos tempo?</h3>
+        <p>Podemos construir um caminho acelerado. A diferença honesta: sem os dados iniciais, partimos de estimativas. Funciona para a maioria, não necessariamente para você. Se o prazo é real, conversamos.</p>
+        <a href="#whatsapp" class="btn btn--whatsapp btn--small">WhatsApp</a>
+      </div>
+      <div class="sub-block">
+        <h3>Quer usar o app sem acompanhamento?</h3>
+        <p>Em breve. Entre na lista de espera.</p>
+        <a href="#whatsapp" class="btn btn--outline btn--small">Lista de espera</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 9. MORA FORA DO BRASIL? ───────────────────────────── -->
+  <section class="section--cream">
+    <div class="container">
+      <div class="outside-brazil">
+        <h2>Mora fora do Brasil?</h2>
+        <p>O protocolo foi desenhado para funcionar na realidade de quem reconstruiu vida em outro país. Alimentação local, rotina diferente, sem rede de apoio. É isso que o Denis viveu. É isso que o C.O.R.E. 8 considera.</p>
+        <a href="#whatsapp" class="btn btn--primary">Falar com o coach →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 10. OFERTA E PREÇOS (PARALLAX) ───────────────────── -->
+  <section class="parallax parallax--pricing pricing">
+    <div class="content">
+      <div class="container">
+        <span class="label" style="color:rgba(255,255,255,0.55);">Investimento</span>
+        <h2 style="color:#fff;">Protocolo C.O.R.E. 8 · 16 semanas</h2>
+        <p class="pricing-sub">Acompanhamento ativo com um coach real.<br>Não um app. Não uma planilha no grupo do WhatsApp.</p>
+        <p class="pricing-value">Personal trainer presencial cobra entre CAD$ 60 e CAD$ 120 por sessão — só o treino, sem protocolo de nutrição, sem análise de dados, sem revisões. Com o C.O.R.E. 8 você tem tudo isso pelo custo de menos de duas sessões avulsas por mês.</p>
+
+        <div class="price-cards">
+          <div class="price-card">
+            <p class="price-period">Mensal</p>
+            <p class="price-amount"><span>CAD$</span> 69,90</p>
+            <p class="price-total">à vista: CAD$ 66,40/mês</p>
+          </div>
+          <div class="price-card price-card--featured">
+            <p class="price-period">Quadrimestral</p>
+            <p class="price-amount"><span>CAD$</span> 49,90</p>
+            <p class="price-total">à vista: CAD$ 189,60</p>
+          </div>
+          <div class="price-card">
+            <p class="price-period">Anual</p>
+            <p class="price-amount"><span>CAD$</span> 44,90</p>
+            <p class="price-total">à vista: CAD$ 511,85</p>
+          </div>
+        </div>
+
+        <p class="pricing-note">Grupos de 3+: CAD$ 45,90/mês por pessoa · <a href="#whatsapp" style="color:rgba(255,255,255,0.7);text-decoration:underline;">WhatsApp</a></p>
+
+        <ul class="includes">
+          <li>Onboarding com mapeamento da sua rotina, biologia e objetivos reais</li>
+          <li>Treino e nutrição montados para você, não para um perfil genérico</li>
+          <li>8 revisões quinzenais com análise de dados e ajuste do protocolo</li>
+          <li>Suporte direto com o coach</li>
+          <li>App com histórico de treinos, registros e dashboard</li>
+          <li>Comunidade de alunos no protocolo</li>
+          <li>Ao final: você sai com a fórmula do que funciona para o seu corpo</li>
+        </ul>
+
+        <div class="pricing-ctas">
+          <div class="btn-group" style="justify-content:center;">
+            <a href="#checkout" class="btn btn--primary">Começar agora →</a>
+            <a href="#whatsapp" class="btn btn--outline-white">Tenho dúvidas →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 11. GARANTIA ──────────────────────────────────────── -->
+  <section class="section--white">
+    <div class="container">
+      <div class="guarantee-card">
+        <h2>Os primeiros 21 dias são seus para decidir.</h2>
+        <p>Não quero que você entre por impulso. Quero que você entre porque faz sentido agora.</p>
+        <p>Isso não é um app. É um acompanhamento com uma pessoa real.</p>
+        <p>Nos primeiros 21 dias, você passa pelo onboarding: mapeio sua rotina, objetivos e realidade. Preparo uma proposta personalizada e apresento como o programa vai funcionar para você. Só depois o protocolo começa.</p>
+        <p>Se dentro desses 21 dias não for o momento certo, devolvo 100%. Sem formulário, sem justificativa.</p>
+        <p>A partir do 22º dia: acompanhamento ativo. Retornos no app sobre seus registros, análise quinzenal com base nos seus dados reais e ajustes feitos com o que você está vivendo.</p>
+        <p>Se sentir que o acompanhamento não está acontecendo como descrito, me avisa. Eu resolvo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 12. FAQ ────────────────────────────────────────────── -->
+  <section class="section--dark faq-section">
+    <div class="container">
+      <h2>Perguntas frequentes</h2>
+      <ul class="faq-list">
+
+        <li class="faq-item">
+          <button class="faq-question">
+            E se minha semana virar caos?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            O protocolo foi feito para absorver isso. Você remeja o treino para o espaço que aparece. Na revisão seguinte, o coach analisa e ajusta. Você não recomeça do zero.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            Já investi antes e não funcionou.
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            O problema não era você. Era o encaixe. O C.O.R.E. 8 começa entendendo como você funciona antes de prescrever qualquer coisa. Abordagem diferente, resultado pode ser diferente.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            Não tenho tempo para 1 hora por dia.
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            O protocolo é montado para o tempo que você tem. 30 minutos três vezes por semana? O treino reflete isso. A semana perfeita não existe. O C.O.R.E. 8 foi feito para a semana real.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            Preciso de academia ou posso treinar em casa?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Funciona com o que você tem: academia completa, pesos livres ou equipamento mínimo em casa. Isso é mapeado no onboarding.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            Funciona para quem mora fora do Brasil?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Sim. O protocolo considera alimentação local, rotina do país onde você vive e o contexto de quem construiu vida fora.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            CAD$ 49,90 por mês. Preciso pensar.
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Faz sentido. Considere também o custo do que não muda: energia que drena, resultado que não aparece, mais um programa para a gaveta.
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            O protocolo é em português?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Sim. Para inglês ou espanhol, entre em contato antes de assinar. <a href="#whatsapp" style="color:var(--accent);text-decoration:underline;">WhatsApp</a>
+          </div>
+        </li>
+
+        <li class="faq-item">
+          <button class="faq-question">
+            Posso começar com outras pessoas?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Sim. Grupos de 3 ou mais: CAD$ 45,90/mês por pessoa. <a href="#whatsapp" style="color:var(--accent);text-decoration:underline;">WhatsApp</a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── 13. CTA FINAL ─────────────────────────────────────── -->
+  <section class="section--cta">
+    <div class="container" style="text-align:center;">
+      <p class="cta-final-body">Os próximos meses vão passar de qualquer forma.</p>
+      <p class="cta-final-body">A questão é o que vai ser diferente quando passarem.</p>
+      <p class="cta-final-body">Você pode chegar ao final do ano igual a hoje. Sobrevivendo. Mais uma promessa não cumprida consigo mesmo.</p>
+      <p class="cta-final-body"><strong>Ou pode chegar acordando porque o corpo terminou de descansar. Com energia às 19h. Com a fórmula do que funciona para você.</strong></p>
+      <div class="btn-group" style="justify-content:center;">
+        <a href="#checkout" class="btn btn--primary">Quero chegar ao final do ano diferente →</a>
+        <a href="#whatsapp" class="btn btn--whatsapp">Tenho dúvidas. Falar com o coach →</a>
+      </div>
+      <p class="cta-summary">CAD$ 49,90/mês · 16 semanas · 8 revisões · Protocolo feito para a sua vida</p>
+      <div class="cta-guarantee">
+        21 dias para decidir. Onboarding personalizado e apresentação do protocolo antes de qualquer comprometimento. Se não for o momento, devolvo 100%.
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 14. FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <p>© 2026 INTEGR8. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ─── JS ────────────────────────────────────────────────── -->
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        document.querySelectorAll('.faq-item.open').forEach(open => {
+          if (open !== item) open.classList.remove('open');
+        });
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
