@@ -6,15 +6,17 @@ const nextConfig: NextConfig = {
     pagesBufferLength: 5,
   },
   turbopack: {},
-  async redirects() {
-    return [
-      {
-        source: '/onboarding',
-        destination: 'https://integr8-634054956771.us-central1.run.app',
-        permanent: false,
-      },
-    ];
-  },
-};
+async rewrites() {
+  return [
+    {
+      source: '/onboarding',
+      destination: 'https://integr8-634054956771.us-central1.run.app',
+    },
+    {
+      source: '/onboarding/:path*',
+      destination: 'https://integr8-634054956771.us-central1.run.app/:path*',
+    },
+  ];
+},
 
 export default nextConfig;
