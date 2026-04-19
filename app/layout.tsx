@@ -1,10 +1,3 @@
-export const metadata = {
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
-}
-
 import type { Metadata } from 'next'
 import { Instrument_Serif, DM_Sans } from 'next/font/google'
 import './globals.css'
@@ -25,6 +18,12 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://integr8.fit'),
+export const metadata: Metadata = {
+  metadataBase: new URL('https://integr8.fit'),
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
   title: 'Integr8 · Protocolo C.O.R.E. 8 — Coaching personalizado de saúde',
   description:
     'Método personalizado de treino e nutrição para quem quer mais energia e um corpo que acompanha a vida que já tem. 16 semanas de acompanhamento real com Denis Gugia.',
