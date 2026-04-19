@@ -17,9 +17,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://integr8.fit'),
-export const metadata: Metadata = {
-  metadataBase: new URL('https://integr8.fit'),
+  metadataBase: new URL('https://integr8-hub.com'),
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
@@ -37,12 +35,12 @@ export const metadata: Metadata = {
     'Integr8',
     'C.O.R.E. 8',
   ],
-  authors: [{ name: 'Denis Gugia', url: 'https://integr8.fit' }],
+  authors: [{ name: 'Denis Gugia', url: 'https://integr8-hub.com' }],
   creator: 'Denis Gugia',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://integr8.fit',
+    url: 'https://integr8-hub.com',
     siteName: 'Integr8',
     title: 'Integr8 · Protocolo C.O.R.E. 8',
     description:
@@ -75,11 +73,11 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://integr8.fit',
+    canonical: 'https://integr8-hub.com',
     languages: {
-      'pt-BR': 'https://integr8.fit',
-      'en-CA': 'https://integr8.fit/en',
-      es: 'https://integr8.fit/es',
+      'pt-BR': 'https://integr8-hub.com',
+      'en-CA': 'https://integr8-hub.com/en',
+      es: 'https://integr8-hub.com/es',
     },
   },
 }
@@ -89,12 +87,12 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'Person',
-      '@id': 'https://integr8.fit/#denis',
+      '@id': 'https://integr8-hub.com/#denis',
       name: 'Denis Gugia',
       jobTitle: 'Personal Trainer & Health Coach',
       description:
         'Personal trainer certificado com mais de uma década de experiência em treino e nutrição personalizada.',
-      url: 'https://integr8.fit',
+      url: 'https://integr8-hub.com',
       sameAs: [
         'https://instagram.com/PLACEHOLDER',
         'https://linkedin.com/in/PLACEHOLDER',
@@ -102,23 +100,23 @@ const structuredData = {
     },
     {
       '@type': 'HealthAndBeautyBusiness',
-      '@id': 'https://integr8.fit/#business',
+      '@id': 'https://integr8-hub.com/#business',
       name: 'Integr8',
       description:
         'Coaching personalizado de saúde, treino e nutrição com o Protocolo C.O.R.E. 8.',
-      url: 'https://integr8.fit',
-      founder: { '@id': 'https://integr8.fit/#denis' },
+      url: 'https://integr8-hub.com',
+      founder: { '@id': 'https://integr8-hub.com/#denis' },
       areaServed: 'Worldwide',
       availableLanguage: ['Portuguese', 'English', 'Spanish'],
       priceRange: '$$',
     },
     {
       '@type': 'Service',
-      '@id': 'https://integr8.fit/#service',
+      '@id': 'https://integr8-hub.com/#service',
       name: 'Protocolo C.O.R.E. 8',
       description:
         'Programa de coaching 1:1 com 16 semanas de acompanhamento personalizado de treino e nutrição.',
-      provider: { '@id': 'https://integr8.fit/#business' },
+      provider: { '@id': 'https://integr8-hub.com/#business' },
       serviceType: 'Health Coaching',
       offers: {
         '@type': 'Offer',
@@ -135,7 +133,7 @@ const structuredData = {
     },
     {
       '@type': 'FAQPage',
-      '@id': 'https://integr8.fit/#faq',
+      '@id': 'https://integr8-hub.com/#faq',
       mainEntity: [
         {
           '@type': 'Question',
