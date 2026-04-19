@@ -1,0 +1,12 @@
+﻿{
+  "rewrites": [
+    {
+      "source": "/onboarding/(.*)",
+      "destination": "https://integr8-634054956771.us-central1.run.app/$1"
+    },
+    {
+      "source": "/onboarding",
+      "destination": "https://integr8-634054956771.us-central1.run.app"
+    }
+  ]
+}
